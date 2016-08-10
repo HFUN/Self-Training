@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>IIFE</title>
+</head>
+<body>
+	<a>Click</a><br>
+	<a>Click</a><br>
+	<a>Click</a><br>
+	<a>Click</a><br>
+	<a>Click</a><br>
+	<a>Click</a><br>
+	<a>Click</a><br>
+	<a>Click</a><br>
+	<a>Click</a>
+	<!-- <script type="text/javascript">
+		var elems = document.getElementsByTagName( 'a' );
+		for ( var i = 0; i < elems.length; i++ ) {
+  			elems[ i ].addEventListener( 'click', function(e){
+    			e.preventDefault();
+    			alert( 'I am link #' + i );
+			}, 'false' );
+		}
+	</script> -->
+	<!-- <script type="text/javascript">
+		var elems = document.getElementsByTagName("a");
+		for (var i = 0; i < elems.length; i++) {
+			(function(lockedindex){
+				elems[i].addEventListener("click", function(e){
+					e.preventDefault();
+					alert("I'm link #" + lockedindex);
+				}, false)
+			})(i);
+		}
+	</script> -->
+	<script type="text/javascript">
+		var elems = document.getElementsByTagName("a");
+		for (i = 0; i < elems.length; i++) {
+			elems[i].addEventListener("click", (function(lockedindex){
+				return function(e) {
+					e.preventDefault();
+					alert("I'm link #" + (lockedindex + 1));
+				}
+			})(i));
+		}
+	</script>
+</body>
+</html>

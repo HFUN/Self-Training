@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>closure</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function func1(){
+			var flag = 999;
+			return function(){
+				return flag;
+			}
+		}
+		try {
+			console.log(flag);
+		} catch(e){
+			console.log("不能访问变量 flag");
+		}// error
+		console.log(func1()());
+	</script>
+</body>
+</html>
