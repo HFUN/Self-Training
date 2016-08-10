@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Drag Local Resource</title>
+	<style type="text/css">
+		#imgContainer {
+			background-color: #ccc;
+			width: 400px;
+			height: 400px;
+		}
+	</style>
+</head>
+<body>
+	<div id="showMsg"></div>
+	<div id="imgContainer"></div>
+	<script type="text/javascript">
+		var img = document.getElementById("imgContainer");
+		var Msg = document.getElementById("showMsg");
+
+		img.ondragover = function(e){
+			e.preventDefault();
+		}
+
+		img.ondrop = function(e){
+			e.preventDefault();
+			// showObj(e.dataTransfer.files);
+			var f = e.dataTransfer.files[0];
+			var fileReader = new FileReader();
+
+			fileReader.readAsDataURL(f);
+
+			fileReader.onload = function(e){
+				// showObj(e.target);
+				imgContainer.innerHTML = "\<img src=" + fileReader.result + "\>";
+			}
+		}
+
+		function showObj(obj){
+			var s = "";
+			for (var n in obj) {
+				s += n + ": " + obj[n] + "\<br\>";
+			}
+			Msg.innerHTML = s;
+		}
+	</script>
+</body>
+</html>
