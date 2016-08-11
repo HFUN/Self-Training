@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas Path</title>
+
+</head>
+<body onload="drawCanvas('canvasId')">
+
+	<!--画布的大小似乎应该通过元素属性来设置, 否则会导致拉伸?-->
+	<canvas id="canvasId" width="600px" height="700px"></canvas>
+
+	<script type="text/javascript">
+
+		function drawCanvas(id){
+
+			var getCanvas = document.getElementById(id);
+			var ctx = getCanvas.getContext("2d");
+
+			ctx.fillStyle = "#eeeeee";
+			ctx.fillRect(0, 0, 600, 700);
+
+			for (var i = 1; i <= 10; i++) {
+				ctx.beginPath();
+				ctx.arc(i*25, i*25, i*15, 0, Math.PI*2, true);
+				ctx.closePath(); // 记住要关闭路径
+				ctx.fillStyle = "rgba(255, 0, 0, 0.25)";
+				ctx.fill();
+			}
+		}
+
+	</script>
+</body>
+</html>
