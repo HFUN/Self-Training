@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div>
+    <textarea id="txt" style="width: 200px; height: 200px;"></textarea>
+    <button id="btn">save via localStorage</button>
+  </div>
+  <div>
+    <textarea id="sessionTxt" style="width: 50px; height: 50px;"></textarea>
+    <button id="sessionButton">operation via localStorage</button>
+  </div>
+  <script>
+    var txt = document.getElementById("txt");
+    var btn = document.getElementById("btn");
+    var sessionText = document.getElementById("sessionTxt");
+    var sessionBtn = document.getElementById("sessionButton");
+    var currentNum = 0;
+
+    if (localStorage.text) {
+      txt.value = localStorage.text;
+    }
+
+    btn.onclick = function () {
+      if (txt.value) {
+        localStorage.setItem("text", txt.value);
+      }
+    }
+
+    if (sessionStorage.num) {
+      sessionText.value = sessionStorage.num;
+      currentNum = sessionStorage.num;
+    } else {
+      sessionText.value = 0;
+    }
+
+    sessionBtn.onclick = function () {
+      currentNum++;
+      sessionText.value = currentNum;
+      sessionStorage.setItem("num", currentNum);
+    }
+  </script>
+</body>
+</html>
