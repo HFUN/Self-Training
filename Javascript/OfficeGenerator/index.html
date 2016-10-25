@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../Semantic-UI/dist/semantic.css">
+  <title>Office Generator</title>
+</head>
+<body>
+<form>
+  <div>
+    <input id="fileInput" type="file" onchange="processFiles(this.files)"/>
+  </div>
+  <div>
+    <input id="btnModify" type="button" onclick="modifyDocument()" value="Modify"/>
+  </div>
+  <div>
+    <input id="btnSave" type="button" onclick="saveDocument()" value="Save"/>
+  </div>
+</form>
+<script src="../JQuery/jquery-3.1.1.js"></script>
+<script src="../Semantic-UI/dist/semantic.js"></script>
+<script type="text/javascript" src="../OpenXmlSdkJs/linq.js"></script>
+<script type="text/javascript" src="../OpenXmlSdkJs/ltxml.js"></script>
+<script type="text/javascript" src="../OpenXmlSdkJs/ltxml-extensions.js"></script>
+<script type="text/javascript" src="../OpenXmlSdkJs/jszip.js"></script>
+<script type="text/javascript" src="../OpenXmlSdkJs/jszip-load.js"></script>
+<script type="text/javascript" src="../OpenXmlSdkJs/jszip-inflate.js"></script>
+<script type="text/javascript" src="../OpenXmlSdkJs/jszip-deflate.js"></script>
+<script type="text/javascript" src="../OpenXmlSdkJs/openxml.js"></script>
+<script type="text/javascript" src="../OpenXmlSdkJs/FileSaver.js"></script>
+<script type="text/javascript">
+  /***************************************************************************
+
+   Copyright (c) Microsoft Corporation 2013.
+
+   This code is licensed using the Microsoft Public License (Ms-PL).  You can find the text of the license here:
+
+   http://www.microsoft.com/resources/sharedsource/licensingbasics/publiclicense.mspx
+
+   Published at http://OpenXmlDeveloper.org
+   Resource Center and Documentation: http://openxmldeveloper.org/wiki/w/wiki/open-xml-sdk-for-javascript.aspx
+
+   Developer: Eric White
+   Blog: http://www.ericwhite.com
+   Twitter: @EricWhiteDev
+   Email: eric@ericwhite.com
+
+   ***************************************************************************/
+
+  var modifyDocument = null;
+  var processFiles = null;
+  var saveDocument = null;
+
+  (function (root) {  // root = global
+    "use strict";
+
+    var XAttribute = Ltxml.XAttribute;
+    var XCData = Ltxml.XCData;
+    var XComment = Ltxml.XComment;
+    var XContainer = Ltxml.XContainer;
+    var XDeclaration = Ltxml.XDeclaration;
+    var XDocument = Ltxml.XDocument;
+    var XElement = Ltxml.XElement;
+    var XName = Ltxml.XName;
+    var XNamespace = Ltxml.XNamespace;
+    var XNode = Ltxml.XNode;
+    var XObject = Ltxml.XObject;
+    var XProcessingInstruction = Ltxml.XProcessingInstruction;
+    var XText = Ltxml.XText;
+    var XEntity = Ltxml.XEntity;
+    var cast = Ltxml.cast;
+    var castInt = Ltxml.castInt;
+
+    var W = openXml.W;
+    var NN = openXml.NoNamespace;
+    var wNs = openXml.wNs;
+
+    root.processFiles = function (files) {
+      var file = files[0];
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        // when this event is invoked, the document has been loaded
+        openedFileName = file.name;
+        openedFileData = e.target.result;
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    var openedFileName = null;
+    var openedFileData = null;
+
+    root.modifyDocument = function () {
+      if (openedFileName === null || openedFileData === null) {
+        alert("You must open a file first.");
+      }
+      else {
+        /******************************************************************************/
+        // open the document
+        var doc = new openXml.OpenXmlPackage(openedFileData);
+
+        // add a paragraph to the beginning of the document.
+        var body = doc.mainDocumentPart().getXDocument().root.element(W.body);
+        body.addFirst(
+                new XElement(W.p,
+                        new XElement(W.r,
+                                new XElement(W.t, "New first paragraph."))));
+
+        // serialize it to a blob
+        openedFileData = doc.saveToBlob();
+
+        alert("Document modified.");
+        /******************************************************************************/
+      }
+    }
+
+    root.saveDocument = function () {
+      if (openedFileName === null || openedFileData === null) {
+        alert("You must open a document first.");
+      }
+      else {
+        saveAs(openedFileData, openedFileName);
+      }
+    }
+
+  }(this));
+</script>
+</body>
+</html>
